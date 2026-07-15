@@ -11,6 +11,13 @@
 </script>
 
 <script>document.documentElement.classList.remove('no-js');</script>
+<script>
+/* ===== WORLD CUP 2026 THEME — temporary; auto-reverts to normal after the final ===== */
+(function(){
+  var WC_END = new Date('2026-07-20T12:00:00'); /* theme switches OFF at/after this moment */
+  if (new Date() < WC_END) document.documentElement.classList.add('wc');
+})();
+</script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Exequiel Van — Social Media Manager</title>
@@ -634,6 +641,49 @@ footer{background:var(--forest-deep);color:var(--cream);padding:70px 0 36px;marg
   .hero-inner > *{opacity:1!important;transform:none!important}
   .cursor-dot,.cursor-ring,.cursor-glow{display:none}
   body.custom-cursor{cursor:auto}
+}
+
+/* ============================================================ WORLD CUP THEME (temporary) */
+/* subtle mowed-pitch stripes behind the hero */
+html.wc .hero-sticky::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:repeating-linear-gradient(90deg, rgba(30,58,40,.05) 0 60px, rgba(30,58,40,0) 60px 120px);}
+/* floating scoreboard badge */
+.wc-badge{position:fixed;left:20px;bottom:20px;z-index:9000;display:flex;align-items:center;gap:11px;
+  background:var(--forest);color:var(--cream);border:1px solid rgba(199,242,74,.28);
+  padding:10px 12px 10px 12px;border-radius:16px;box-shadow:0 18px 44px -16px rgba(0,0,0,.55);
+  font-family:var(--font-body);max-width:calc(100vw - 40px);animation:wcIn .6s var(--ease-soft) both;}
+@keyframes wcIn{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
+.wc-badge .ball{font-size:1.55rem;line-height:1;animation:wcSpin 3.6s linear infinite;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+@keyframes wcSpin{to{transform:rotate(360deg)}}
+.wc-badge .wc-txt{display:flex;flex-direction:column;line-height:1.2}
+.wc-badge .wc-title{font-family:var(--font-display);font-weight:700;font-size:.9rem;letter-spacing:.01em;color:var(--lime)}
+.wc-badge .wc-sub{font-size:.72rem;color:rgba(244,241,230,.72);margin-top:1px;font-variant-numeric:tabular-nums}
+.wc-badge .wc-close{margin-left:4px;width:22px;height:22px;border-radius:50%;border:none;cursor:pointer;flex:0 0 auto;
+  background:rgba(244,241,230,.12);color:var(--cream);display:grid;place-items:center;font-size:.78rem;line-height:1;transition:background .2s}
+.wc-badge .wc-close:hover{background:rgba(244,241,230,.26)}
+/* one-time confetti burst */
+.wc-confetti{position:fixed;inset:0;z-index:8999;pointer-events:none;overflow:hidden}
+.wc-confetti i{position:absolute;top:-12vh;width:9px;height:14px;border-radius:2px;opacity:.92;animation:wcFall linear forwards}
+@keyframes wcFall{to{transform:translateY(122vh) rotate(680deg);opacity:.9}}
+/* football cursor — replaces the dot + ring while the theme is live (desktop only; glow stays) */
+html.wc body.custom-cursor .cursor-dot,
+html.wc body.custom-cursor .cursor-ring{display:none!important}
+.wc-cursor{position:fixed;top:0;left:0;width:34px;height:34px;margin:-17px 0 0 -17px;z-index:10002;
+  pointer-events:none;will-change:transform;display:grid;place-items:center;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.wc-cursor span{font-size:26px;line-height:1;display:block;transition:transform .2s var(--ease-soft)}
+.wc-cursor.hot span{transform:scale(1.38)}
+@media (hover:none),(pointer:coarse){.wc-cursor{display:none!important}}
+@media(max-width:600px){
+  .wc-badge{left:12px;bottom:12px;padding:8px 10px 8px 10px;border-radius:14px;gap:9px}
+  .wc-badge .ball{font-size:1.3rem}
+  .wc-badge .wc-title{font-size:.82rem}
+  .wc-badge .wc-sub{font-size:.68rem}
+}
+@media (prefers-reduced-motion: reduce){
+  .wc-badge{animation:none}
+  .wc-badge .ball{animation:none}
+  .wc-confetti{display:none}
 }
 </style>
 </head>
@@ -1765,6 +1815,88 @@ footer{background:var(--forest-deep);color:var(--cream);padding:70px 0 36px;marg
   igIO.observe(post);
 
   show(0);
+})();
+/* ---------- World Cup 2026 theme (badge + confetti + favicon) ---------- */
+(function(){
+  var root = document.documentElement;
+  if(!root.classList.contains('wc')) return;               /* off outside the tournament */
+  var FINAL = new Date('2026-07-19T22:00:00');              /* approx final kickoff (editable) */
+
+  /* ⚽ tab favicon while the theme is live */
+  try{
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.92em' font-size='88'>\u26BD</text></svg>";
+    var link = document.querySelector("link[rel='icon']");
+    if(!link){ link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+    link.href = 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }catch(e){}
+
+  /* floating scoreboard badge with live countdown (dismissible for the session) */
+  if(!sessionStorage.getItem('wcHide')){
+    var b = document.createElement('div');
+    b.className = 'wc-badge';
+    b.setAttribute('role','note');
+    b.innerHTML =
+      '<span class="ball" aria-hidden="true">\u26BD</span>' +
+      '<span class="wc-txt"><span class="wc-title">World Cup 2026</span>' +
+      '<span class="wc-sub" id="wcSub">Cheering on the beautiful game</span></span>' +
+      '<button class="wc-close" aria-label="Dismiss World Cup banner">\u2715</button>';
+    document.body.appendChild(b);
+    b.querySelector('.wc-close').addEventListener('click', function(){
+      b.remove(); try{ sessionStorage.setItem('wcHide','1'); }catch(e){}
+    });
+    var sub = b.querySelector('#wcSub');
+    function tick(){
+      var diff = FINAL - new Date();
+      if(diff <= 0){ sub.textContent = 'The final is here! \u26BD'; return; }
+      var d = Math.floor(diff/864e5), h = Math.floor(diff%864e5/36e5), m = Math.floor(diff%36e5/6e4);
+      sub.textContent = 'Final in ' + d + 'd ' + h + 'h ' + m + 'm';
+    }
+    tick(); setInterval(tick, 60000);
+  }
+
+  /* rolling football cursor (desktop pointers only) */
+  if(window.matchMedia && window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    var ball = document.createElement('div');
+    ball.className = 'wc-cursor';
+    ball.setAttribute('aria-hidden','true');
+    ball.innerHTML = '<span>\u26BD</span>';
+    document.body.appendChild(ball);
+    var bx = window.innerWidth/2, by = window.innerHeight/2, tx = bx, ty = by, rot = 0;
+    window.addEventListener('mousemove', function(e){ tx = e.clientX; ty = e.clientY; }, {passive:true});
+    document.addEventListener('mouseleave', function(){ ball.style.opacity = 0; });
+    document.addEventListener('mouseenter', function(){ ball.style.opacity = ''; });
+    (function roll(){
+      var nx = bx + (tx-bx)*0.35, ny = by + (ty-by)*0.35;
+      rot += (nx - bx) * 2.1;                 /* spin proportional to horizontal travel */
+      bx = nx; by = ny;
+      ball.style.transform = 'translate(' + bx + 'px,' + by + 'px) rotate(' + rot + 'deg)';
+      requestAnimationFrame(roll);
+    })();
+    document.querySelectorAll('a, button, [data-mag], [data-tilt], .chip, .reel, .price, .svc, .tcard, .proc-step').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ ball.classList.add('hot'); });
+      el.addEventListener('mouseleave', function(){ ball.classList.remove('hot'); });
+    });
+  }
+
+  /* one-time confetti per session, in brand colours */
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce && !sessionStorage.getItem('wcConfetti')){
+    try{ sessionStorage.setItem('wcConfetti','1'); }catch(e){}
+    var wrap = document.createElement('div'); wrap.className = 'wc-confetti';
+    var colors = ['#C7F24A','#B6E83B','#46B36A','#F4E9C9','#F4C542','#2E8C4F'];
+    for(var i=0;i<46;i++){
+      var p = document.createElement('i');
+      p.style.left = (Math.random()*100) + 'vw';
+      p.style.background = colors[i % colors.length];
+      p.style.animationDuration = (2.4 + Math.random()*1.6) + 's';
+      p.style.animationDelay = (Math.random()*0.5) + 's';
+      p.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
+      if(Math.random() < 0.5) p.style.borderRadius = '50%';
+      wrap.appendChild(p);
+    }
+    document.body.appendChild(wrap);
+    setTimeout(function(){ wrap.remove(); }, 4400);
+  }
 })();
 </script>
 </body>
