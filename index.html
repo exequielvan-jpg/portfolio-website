@@ -142,7 +142,7 @@ header.shrink .nav{box-shadow:var(--shadow)}
 .brand .leaf svg{width:18px;height:18px}
 .brand small{display:block;font-family:var(--font-body);font-weight:500;font-size:.66rem;color:var(--ink-mute);letter-spacing:.12em;text-transform:uppercase;margin-top:-2px}
 .nav-links{display:flex;align-items:center;gap:6px}
-.nav-links a.lnk{padding:9px 16px;border-radius:100px;font-weight:500;font-size:.95rem;color:var(--ink-soft);transition:background .25s,color .25s}
+.nav-links a.lnk{padding:9px 16px;border-radius:100px;font-weight:500;font-size:.95rem;color:var(--ink-soft);transition:background .25s,color .25s;white-space:nowrap}
 .nav-links a.lnk:hover{background:rgba(22,41,28,.06);color:var(--ink)}
 .btn{
   display:inline-flex;align-items:center;gap:9px;font-weight:600;
@@ -157,6 +157,13 @@ header.shrink .nav{box-shadow:var(--shadow)}
 .btn:hover svg{transform:translateX(4px) rotate(-2deg)}
 .nav-toggle{display:none;width:46px;height:46px;border-radius:50%;background:var(--forest);color:var(--lime)}
 .nav-toggle span{display:block;width:18px;height:2px;background:currentColor;margin:3px auto;transition:.3s}
+/* narrow desktops: tighten the links so the full nav fits before it collapses to the menu */
+@media(min-width:881px) and (max-width:1100px){
+  .nav{padding-left:16px}
+  .nav-links{gap:0}
+  .nav-links a.lnk{padding:9px 10px;font-size:.9rem}
+  .nav-links .btn{padding:12px 16px}
+}
 
 @media(max-width:880px){
   .nav-links{
@@ -439,30 +446,37 @@ h2.sec-title{font-family:var(--font-display);font-weight:700;letter-spacing:-.03
 .svc.wide .ic{flex-shrink:0}
 .svc.wide .txt{flex:1;min-width:240px}
 
-/* ============================================================ PRICING */
-.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:56px;align-items:stretch}
-.price{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:34px 30px;display:flex;flex-direction:column;
-  transition:transform .4s var(--ease),box-shadow .4s;
+/* ============================================================ BOOK A CALL */
+.book-frame{
+  margin-top:56px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:14px;overflow:hidden;box-shadow:var(--shadow);
+  display:grid;grid-template-columns:minmax(260px,320px) 1fr;gap:14px;
 }
-.price:hover{transform:translateY(-8px);box-shadow:var(--shadow)}
-.price.feat{background:var(--forest);color:var(--cream);transform:scale(1.03)}
-.price.feat:hover{transform:scale(1.03) translateY(-8px)}
-.price .tier{font-family:var(--font-display);font-weight:600;font-size:1.35rem}
-.price .for{color:var(--ink-mute);font-size:.9rem;margin-top:4px}
-.price.feat .for{color:rgba(244,241,230,.7)}
-.price .cost{font-family:var(--font-display);font-weight:700;font-size:2.8rem;letter-spacing:-.03em;margin:22px 0 2px}
-.price .cost span{font-size:.9rem;font-weight:500;color:var(--ink-mute);font-family:var(--font-body)}
-.price.feat .cost span{color:rgba(244,241,230,.7)}
-.price ul{margin:24px 0 28px;display:flex;flex-direction:column;gap:13px}
-.price li{display:flex;gap:11px;align-items:flex-start;font-size:.96rem;color:var(--ink-soft)}
-.price.feat li{color:rgba(244,241,230,.85)}
-.price li .ck{width:21px;height:21px;border-radius:50%;background:var(--lime);color:var(--ink);display:grid;place-items:center;flex-shrink:0;margin-top:1px}
-.price li .ck svg{width:12px;height:12px}
-.price .btn{justify-content:center;margin-top:auto;width:100%}
-.price.feat .badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--lime);color:var(--ink);font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;border-radius:100px;box-shadow:var(--shadow-sm)}
-.price{position:relative}
-.price-note{text-align:center;margin-top:26px;color:var(--ink-mute);font-size:.92rem}
+.book-info{
+  background:var(--forest);color:var(--cream);border-radius:calc(var(--r-lg) - 14px);
+  padding:34px 30px;display:flex;flex-direction:column;gap:28px;
+}
+.book-host{display:flex;align-items:center;gap:16px}
+.book-host img{width:64px;height:64px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--lime)}
+.book-name{display:block;font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.book-host h3{font-family:var(--font-display);font-weight:700;font-size:1.45rem;line-height:1.15;letter-spacing:-.02em;margin-top:4px}
+.book-meta{list-style:none;display:flex;flex-direction:column;gap:14px}
+.book-meta li{display:flex;gap:12px;align-items:flex-start;font-size:.96rem;color:rgba(244,241,230,.85)}
+.book-meta svg{width:20px;height:20px;flex:none;margin-top:2px;color:var(--lime)}
+.book-cover{padding-top:24px;border-top:1px solid rgba(244,241,230,.14)}
+.book-cover span{font-size:.75rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(244,241,230,.6)}
+.book-cover ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:12px}
+.book-cover li{position:relative;padding-left:20px;font-size:.95rem;line-height:1.5;color:rgba(244,241,230,.85)}
+.book-cover li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:50%;background:var(--lime)}
+.book-cal{min-width:0}
+.book-frame .calendly-inline-widget{border-radius:calc(var(--r-lg) - 14px);overflow:hidden;background:#fff}
+@media(max-width:880px){
+  .book-frame{grid-template-columns:1fr}
+  .book-info{padding:24px 22px;gap:20px}
+  .book-cover{display:none}
+}
+/* the custom cursor can't track inside the Calendly iframe — hide it there so it doesn't freeze at the edge */
+body.cursor-in-frame .cursor-glow,body.cursor-in-frame .cursor-dot,body.cursor-in-frame .cursor-ring,body.cursor-in-frame .wc-cursor{visibility:hidden}
 
 /* ============================================================ TESTIMONIALS */
 .tcol{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:56px;align-items:stretch}
@@ -612,8 +626,7 @@ footer{background:var(--forest-deep);color:var(--cream);padding:70px 0 36px;marg
   .proc-step .proc-dot{grid-row:1 / span 2;margin-bottom:0;margin-top:3px;align-self:start}
   .proc-step h4{grid-column:2;align-self:center}
   .proc-step p{grid-column:2;max-width:none;margin-top:4px}
-  .price-grid{grid-template-columns:1fr;max-width:420px;margin-inline:auto;margin-top:40px}
-  .price.feat{transform:none}.price.feat:hover{transform:translateY(-8px)}
+  .book-frame{margin-top:40px}
   .foot-cols{gap:40px}
   .cta{padding:56px 24px}
 }
@@ -622,11 +635,14 @@ footer{background:var(--forest-deep);color:var(--cream);padding:70px 0 36px;marg
   .nav{padding:8px 8px 8px 16px}
   .results{border-radius:var(--r-lg)}
   .section{padding:50px 0}
-  .stat-row,.proof-grid,.svc-grid,.fit-list,.tcol,.tvideo-wrap,.proc,.price-grid{margin-top:30px}
+  .stat-row,.proof-grid,.svc-grid,.fit-list,.tcol,.tvideo-wrap,.proc,.book-frame{margin-top:30px}
   .svc{padding:26px}
   .fit-item{padding:26px}
   .tcard{padding:24px}
-  .price{padding:26px}
+  /* phones: Calendly stacks calendar + times, so go edge-to-edge in the card and give it room */
+  .book-frame{padding:0;gap:0;border-radius:var(--r)}
+  .book-info{border-radius:0}
+  .book-frame .calendly-inline-widget{min-width:0!important;height:760px!important;border-radius:0}
   .cta{padding:46px 20px}
   .foot-cols{gap:30px}
 }
@@ -708,7 +724,7 @@ html.wc body.custom-cursor .cursor-ring{display:none!important}
         <a href="#results" class="lnk">Results</a>
         <a href="#services" class="lnk">Services</a>
         <a href="#process" class="lnk">Process</a>
-        <a href="#pricing" class="lnk">Pricing</a>
+        <a href="#book" class="lnk">Book a call</a>
         <a href="#work" class="lnk">Work</a>
         <a href="#about" class="lnk">About</a>
         <a href="https://calendly.com/exequielvan-socializewithvan/30min" target="_blank" rel="noopener" class="btn btn-primary" data-mag>Book a free call
@@ -1012,56 +1028,41 @@ html.wc body.custom-cursor .cursor-ring{display:none!important}
   </div>
 </section>
 
-<!-- ====================== PRICING ====================== -->
-<section id="pricing" class="section">
+<!-- ====================== BOOK A CALL ====================== -->
+<section id="book" class="section">
   <div class="wrap">
     <div class="reveal">
-      <span class="eyebrow">Simple, honest pricing</span>
-      <h2 class="sec-title">Pick the plan that<br>fits your growth.</h2>
-      <p class="sec-lead">Monthly retainers, no lock-in surprises. Every plan is tailored after our free call — these are starting points.</p>
+      <span class="eyebrow">Book a free call</span>
+      <h2 class="sec-title">Let's talk about<br>your growth.</h2>
+      <p class="sec-lead">Grab a 30-minute slot that suits you. We'll go over your goals and I'll map out a plan built around what you actually need.</p>
     </div>
-    <div class="price-grid">
-      <div class="price reveal">
-        <div class="tier">Spark</div>
-        <div class="for">For personal brands getting started</div>
-        <div class="cost">$800<span>/month</span></div>
-        <ul>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> 8 short-form reels / month</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> Content strategy &amp; calendar</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> 2 platforms, scheduled &amp; posted</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> Monthly analytics report</li>
+    <div class="book-frame reveal">
+      <aside class="book-info">
+        <div class="book-host">
+          <img src="van-avatar.jpg" alt="Exequiel Van" width="64" height="64" loading="lazy" decoding="async">
+          <div>
+            <span class="book-name">Exequiel Van</span>
+            <h3>Free discovery call</h3>
+          </div>
+        </div>
+        <ul class="book-meta">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>30 minutes</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3"/></svg>Video call — link sent on confirmation</li>
         </ul>
-        <a href="https://calendly.com/exequielvan-socializewithvan/30min" target="_blank" rel="noopener" class="btn btn-primary" data-mag>Get started</a>
-      </div>
-
-      <div class="price feat reveal d1">
-        <span class="badge">Most popular</span>
-        <div class="tier">Grow</div>
-        <div class="for">For coaches &amp; realtors scaling up</div>
-        <div class="cost">$1,000<span>/month</span></div>
-        <ul>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> 12 reels / short-form videos</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> Full content strategy &amp; hooks</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> Community management (DMs &amp; comments)</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> 3 platforms + bi-weekly reporting</li>
-        </ul>
-        <a href="https://calendly.com/exequielvan-socializewithvan/30min" target="_blank" rel="noopener" class="btn btn-lime" data-mag>Get started</a>
-      </div>
-
-      <div class="price reveal d2">
-        <div class="tier">Signature</div>
-        <div class="for">Fully done-for-you, hands-off</div>
-        <div class="cost">$1,200<span>/month</span></div>
-        <ul>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> Full social media management</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> 16+ reels &amp; videos / month</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> Community management + trend research</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l4 4L19 6"/></svg></span> All platforms + weekly strategy calls</li>
-        </ul>
-        <a href="https://calendly.com/exequielvan-socializewithvan/30min" target="_blank" rel="noopener" class="btn btn-primary" data-mag>Get started</a>
+        <div class="book-cover">
+          <span>We'll cover</span>
+          <ul>
+            <li>Your goals and who you want to reach</li>
+            <li>What's working on your socials (and what isn't)</li>
+            <li>A plan shaped around what you actually need</li>
+          </ul>
+        </div>
+      </aside>
+      <div class="book-cal">
+        <div class="calendly-inline-widget" data-url="https://calendly.com/exequielvan-socializewithvan/30min?hide_gdpr_banner=1&amp;hide_event_type_details=1" style="min-width:320px;height:700px;"></div>
+        <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
       </div>
     </div>
-    <p class="price-note">Not sure which fits? Every plan is customized on our free call — you only pay for what you need.</p>
   </div>
 </section>
 
@@ -1265,7 +1266,7 @@ html.wc body.custom-cursor .cursor-ring{display:none!important}
           <a href="#results">Results</a>
           <a href="#services">Services</a>
           <a href="#process">Process</a>
-          <a href="#pricing">Pricing</a>
+          <a href="#book">Book a call</a>
           <a href="#work">Work</a>
         </div>
         <div class="foot-col">
@@ -1492,7 +1493,7 @@ html.wc body.custom-cursor .cursor-ring{display:none!important}
       })();
 
       // hover interactive elements -> ring expands, dot hides, glow flares
-      document.querySelectorAll('a, button, [data-mag], [data-tilt], .chip, .reel, .price, .svc, .tcard, .proc-step').forEach(function(el){
+      document.querySelectorAll('a, button, [data-mag], [data-tilt], .chip, .reel, .svc, .tcard, .proc-step').forEach(function(el){
         el.addEventListener('mouseenter', function(){ ring.classList.add('hot'); dot.classList.add('hot'); glow.classList.add('hot'); });
         el.addEventListener('mouseleave', function(){ ring.classList.remove('hot'); dot.classList.remove('hot'); glow.classList.remove('hot'); });
       });
@@ -1872,7 +1873,7 @@ html.wc body.custom-cursor .cursor-ring{display:none!important}
       ball.style.transform = 'translate(' + bx + 'px,' + by + 'px) rotate(' + rot + 'deg)';
       requestAnimationFrame(roll);
     })();
-    document.querySelectorAll('a, button, [data-mag], [data-tilt], .chip, .reel, .price, .svc, .tcard, .proc-step').forEach(function(el){
+    document.querySelectorAll('a, button, [data-mag], [data-tilt], .chip, .reel, .svc, .tcard, .proc-step').forEach(function(el){
       el.addEventListener('mouseenter', function(){ ball.classList.add('hot'); });
       el.addEventListener('mouseleave', function(){ ball.classList.remove('hot'); });
     });
@@ -1897,6 +1898,15 @@ html.wc body.custom-cursor .cursor-ring{display:none!important}
     document.body.appendChild(wrap);
     setTimeout(function(){ wrap.remove(); }, 4400);
   }
+})();
+</script>
+<script>
+/* hide the custom cursor while the pointer is over the Calendly booking embed */
+(function(){
+  var frame = document.querySelector('#book .book-frame');
+  if (!frame) return;
+  frame.addEventListener('mouseenter', function(){ document.body.classList.add('cursor-in-frame'); });
+  frame.addEventListener('mouseleave', function(){ document.body.classList.remove('cursor-in-frame'); });
 })();
 </script>
 </body>
